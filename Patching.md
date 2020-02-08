@@ -61,3 +61,26 @@ adb uninstall com.whatsapp #remove old copy
 adb install repackaged-final.apk
 ```
 
+# Get past WhatsApp verifier
+
+The relevant file is `smali/com/X/2hl.smali`.
+This file uses javax.crypto.Mac to check all signatures from PackageInfo, then some other code at some point checks it against a hardcoded base64 string.
+The calculated and encrypted field is `LX/2hl->A02`, and the hardcoded string is base64 decoded then stored in `LX/2hl->A03`.
+After the static method A00 is done calculating, it instantiates the class which stores A02. After the calculation is done we can inject this snippet:
+
+```
+    invoke-virtual {v4}, Ljavax/crypto/Mac;->doFinal()[B
+
+    move-result-object v0
+
+    # Here we change thingy
+    sget-object v0, LX/2hl;->A03:[B
+    invoke-virtual {v4, v0}, Ljavax/crypto/Mac;->update([B)V
+    invoke-virtual {v4}, Ljavax/crypto/Mac;->doFinal()[B
+    move-result-object v0
+
+    invoke-direct {v1, v0}, LX/2hl;-><init>([B)V
+```
+
+First and last line are original, middle block was inserted in. We store the required value after re-encrypting it with the same key (v4 was the class used to encrypt previously and the keys used are still set after the `doFinal` call).
+This successfully gets past WhatsApp's signature check. Final file in `modifications/2hl.smali`.
