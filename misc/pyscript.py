@@ -4,10 +4,24 @@ import json
 
 #Crashes
 SCRIPT = """
-Interceptor.attach(Module.findExportByName("/system/lib/libc.so", "malloc"), {
-    onEnter: function(args) {
-        send(args[0].toInt32());
-    }
+var mallocPtr = Module.findExportByName("/system/lib/libc.so", "malloc");
+var malloc = new NativeFunction(mallocPtr, 'pointer', ['int']);
+
+Interceptor.replace(mallocPtr, new NativeCallback(function(size) {
+  send(size);
+  return 0;
+}, 'pointer', ['int']))
+"""
+
+"""
+Interceptor.attach(, {
+  onEnter: function(args) {
+    send(args[0].toInt32());
+    args[0] = ptr("0");
+  },
+  //onLeave: function(retval) {
+  //  retval.replace(0);
+  //}
 });
 """
 
