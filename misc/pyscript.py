@@ -2,7 +2,6 @@ import frida
 import sys
 import json
 
-#Crashes
 SCRIPT = """
 var mallocPtr = Module.findExportByName("/system/lib/libc.so", "malloc");
 var malloc = new NativeFunction(mallocPtr, 'pointer', ['int']);
@@ -14,7 +13,7 @@ Interceptor.replace(mallocPtr, new NativeCallback(function(size) {
 """
 
 """
-Interceptor.attach(, {
+Interceptor.attach(Module.findExportByName("/system/lib/libc.so", "malloc"), {
   onEnter: function(args) {
     send(args[0].toInt32());
     args[0] = ptr("0");
