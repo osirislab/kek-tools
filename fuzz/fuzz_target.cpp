@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <dlfcn.h>
 #include <string.h>
 #include "gif.h"
@@ -13,7 +14,12 @@ void *getHandle()
     if (handle != nullptr)
         return handle;
 
-    handle = dlopen("libpl_droidsonroids_gif.so", RTLD_LAZY);
+    //handle = dlopen("libpl_droidsonroids_gif.so", RTLD_LAZY);
+    handle = dlopen("./libpl_droidsonroids_gif.so", RTLD_LAZY);
+    if (handle == NULL)
+    {
+        fprintf(stderr, "dlopen failed: %s\n", dlerror());
+    }
     return handle;
 }
 
