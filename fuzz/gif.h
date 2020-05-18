@@ -28,7 +28,7 @@
 #include "giflib/gif_lib.h"
 
 #ifdef DEBUG
-#include <android/log.h>
+//#include <android/log.h>
 #define  LOG_TAG    "libgif"
 #define  LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
 #else
@@ -41,7 +41,7 @@
 #define OOME_MESSAGE "Failed to allocate native memory"
 #define DEFAULT_FRAME_DURATION_MS 100
 #define STREAM_BUFFER_SIZE  8192
-#define NULL_GIF_INFO (jlong) (intptr_t) NULL;
+#define NULL_GIF_INFO (jlong) (intptr_t) NULL
 
 /**
  * Some gif files are not strictly follow 89a.
@@ -220,4 +220,4 @@ uint_fast32_t seek(GifInfo *info, uint_fast32_t desiredIndex, void *pixels);
 
 void setGCBDefaults(GraphicsControlBlock *gcb);
 
-static GifInfo *createGifInfoFromFile(JNIEnv *env, FILE *file, long long sourceLength);
+GifInfo *createGifInfoFromFile(JNIEnv *env, FILE *file, long long sourceLength);

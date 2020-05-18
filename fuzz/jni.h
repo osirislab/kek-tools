@@ -27,6 +27,8 @@
 #include <stdarg.h>
 #include <stdint.h>
 
+#define __unused __attribute__((unused))
+
 /* Primitive types that match up with Java equivalents. */
 typedef uint8_t  jboolean; /* unsigned 8 bits */
 typedef int8_t   jbyte;    /* signed 8 bits */
