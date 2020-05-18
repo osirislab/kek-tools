@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.4.1)
 set(CMAKE_VERBOSE_MAKEFILE on)
 set(can_use_assembler TRUE)
 enable_language(ASM)
+set(CMAKE_BUILD_TYPE Debug)
 
 
 add_executable(pwnbois_fuzz "")

@@ -203,6 +203,7 @@ bool reset(GifInfo *info);
 int lockPixels(JNIEnv *env, jobject jbitmap, GifInfo *info, void **pixels);
 
 void unlockPixels(JNIEnv *env, jobject jbitmap);
+void unlockPixels_(JNIEnv *env, void** pixels);
 
 long long calculateInvalidationDelay(GifInfo *info, long renderStartTime, uint_fast32_t frameDuration);
 
