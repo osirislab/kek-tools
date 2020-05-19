@@ -1,8 +1,10 @@
 #!/bin/bash
 
-cd $(realpath $(dirname $0))
+set -e
 
-mkdir -p build
+cd $(dirname $(realpath $0))
+
+mkdir -p build bin
 cd build
 
 rm -rf CMakeFiles/
@@ -16,4 +18,4 @@ export CXX=$(which clang++)
 cmake ..
 make -j $(nproc)
 
-cp build/pwnbois_fuzz ./
+cp pwnbois_fuzz ../bin

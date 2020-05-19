@@ -21,7 +21,7 @@ void DetachCurrentThread(void) {
 
 __unused JNIEXPORT jint JNICALL
 JNI_OnLoad(JavaVM *vm, void *__unused reserved) {
-	g_jvm = vm;
+	g_jvm = vm; // ah yeet
 	JNIEnv *env;
 	if ((*vm)->GetEnv(vm, (void **) &env, JNI_VERSION_1_6) != JNI_OK) {
 		return JNI_ERR;
@@ -54,3 +54,17 @@ __unused JNIEXPORT void JNICALL JNI_OnUnload(JavaVM *__unused vm, void *__unused
 ColorMapObject *getDefColorMap(void) {
 	return defaultCmap;
 }
+
+
+
+void hack_onload() {
+  defaultCmap = GifMakeMapObject(8, NULL);
+  if (defaultCmap != NULL) {
+    uint_fast16_t iColor;
+    for (iColor = 1; iColor < 256; iColor++) {
+      defaultCmap->Colors[iColor].Red = (GifByteType) iColor;
+      defaultCmap->Colors[iColor].Green = (GifByteType) iColor;
+      defaultCmap->Colors[iColor].Blue = (GifByteType) iColor;
+    }
+  }
+};
