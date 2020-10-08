@@ -4,14 +4,22 @@ metadata:
   name: kek
 
 ---
-apiVersion: v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: kek-run
   namespace: kek
+  labels:
+    app: kek-run
 spec:
   replicas: 3
+  selector:
+    matchLabels:
+      app: kek-run
   template:
+    metadata:
+      labels:
+        app: kek-run
     spec:
       restartPolicy: Always
       containers:
@@ -31,8 +39,7 @@ spec:
       - name: kek-out
         persistentVolumeClaim:
           claimName: kek-out
-  backoffLimit: 4
-
+  
 
 ---
 apiVersion: v1
