@@ -16,6 +16,9 @@ spec:
   selector:
     matchLabels:
       app: kek-run
+  strategy:
+    type: Recreate
+  revisionHistoryLimit: 0
   template:
     metadata:
       labels:
@@ -24,7 +27,9 @@ spec:
       restartPolicy: Always
       containers:
       - name: fuzz
+        imagePullPolicy: Always
         image: registry.osiris.services/kek/fuzz
+        command: ["../pwnbois_fuzz", "-rss_limit_mb=32000"]
         resources:
           limits:
             memory: "4Gi"

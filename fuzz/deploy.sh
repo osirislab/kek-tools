@@ -6,4 +6,5 @@ kubectl config use-context space
 docker build -t registry.osiris.services/kek/fuzz .
 docker push registry.osiris.services/kek/fuzz
 
-kubectl apply -f job.yml
+kubectl apply -f kube/run.yml
+kubectl rollout restart deployment kek-run -n kek
