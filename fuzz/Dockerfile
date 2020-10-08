@@ -11,9 +11,8 @@ COPY . .
 RUN cmake -B . -G Ninja . \
   && ninja \
   && cd .. \
-  && mv build/pwnbois_fuzz ./ \
-  && rm -rf build/*
+  && mv build/pwnbois_fuzz ./
 
 WORKDIR /opt/kek/out
 
-CMD ./pwnbois_fuzz
+CMD ../pwnbois_fuzz
