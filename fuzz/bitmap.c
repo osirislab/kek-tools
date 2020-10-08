@@ -2,11 +2,10 @@
 //#include <android/bitmap.h>
 
 int lockPixels(JNIEnv *env, jobject jbitmap, GifInfo *info, void **pixels) {
-    //allocate a buffer size width*height
-    *pixels = malloc(info->gifFilePtr->SWidth * info->gifFilePtr->SHeight * sizeof(argb));
+    *pixels = calloc(info->gifFilePtr->SWidth * info->gifFilePtr->SHeight, sizeof(argb));
     info->stride = info->gifFilePtr->SWidth;
-
     return 0;
+
     /*
     AndroidBitmapInfo bitmapInfo;
     if (AndroidBitmap_getInfo(env, jbitmap, &bitmapInfo) == ANDROID_BITMAP_RESULT_SUCCESS)
@@ -42,51 +41,49 @@ int lockPixels(JNIEnv *env, jobject jbitmap, GifInfo *info, void **pixels) {
     */
 }
 
-void unlockPixels_(JNIEnv *env, void **pixels) {
+void unlockPixels_(void *pixels) {
     if (pixels != NULL)
         free(pixels);
 }
 
 void unlockPixels(JNIEnv *env, jobject jbitmap) {
     /*
-       const int unlockPixelsResult = AndroidBitmap_unlockPixels(env, jbitmap);
-       if (unlockPixelsResult == ANDROID_BITMAP_RESULT_SUCCESS) {
-       return;
-       }
-       char *message;
-       switch (unlockPixelsResult) {
-       case ANDROID_BITMAP_RESULT_BAD_PARAMETER:
-       message = "Unlock pixels error, bad parameter";
-       break;
-       case ANDROID_BITMAP_RESULT_JNI_EXCEPTION:
-       message = "Unlock pixels error, JNI exception";
-       break;
-       default:
-       message = "Unlock pixels error";
-       }
-       throwException(env, RUNTIME_EXCEPTION_BARE, message);
-       */
+    const int unlockPixelsResult = AndroidBitmap_unlockPixels(env, jbitmap);
+    if (unlockPixelsResult == ANDROID_BITMAP_RESULT_SUCCESS) {
+        return;
+    }
+    char *message;
+    switch (unlockPixelsResult) {
+        case ANDROID_BITMAP_RESULT_BAD_PARAMETER:
+            message = "Unlock pixels error, bad parameter";
+            break;
+        case ANDROID_BITMAP_RESULT_JNI_EXCEPTION:
+            message = "Unlock pixels error, JNI exception";
+            break;
+        default:
+            message = "Unlock pixels error";
+    }
+    throwException(env, RUNTIME_EXCEPTION_BARE, message);
+    */
 }
 
 __unused JNIEXPORT jlong JNICALL
 Java_pl_droidsonroids_gif_GifInfoHandle_renderFrame(JNIEnv *env, jclass __unused handleClass, jlong gifInfo, jobject jbitmap) {
-    return 0;
-    /*
-       GifInfo *info = (GifInfo *) (intptr_t) gifInfo;
-       if (info == NULL)
-       return -1;
+    GifInfo *info = (GifInfo *) (intptr_t) gifInfo;
+    if (info == NULL)
+        return 0;
 
-       long renderStartTime = getRealTime();
-       void *pixels;
-       if (lockPixels(env, jbitmap, info, &pixels) != 0) {
-       return 0;
-       }
-       DDGifSlurp(info, true, false);
-       if (info->currentIndex == 0) {
-       prepareCanvas(pixels, info);
-       }
-       const uint_fast32_t frameDuration = getBitmap(pixels, info);
-       unlockPixels(env, jbitmap);
-       return calculateInvalidationDelay(info, renderStartTime, frameDuration);
-       */
+    long renderStartTime = getRealTime();
+    void *pixels;
+    if (lockPixels(env, jbitmap, info, &pixels) != 0) {
+        return 0;
+    }
+    DDGifSlurp(info, true, false);
+    if (info->currentIndex == 0) {
+        prepareCanvas(pixels, info);
+    }
+    const uint_fast32_t frameDuration = getBitmap(pixels, info);
+    unlockPixels(env, jbitmap);
+    unlockPixels_(pixels);
+    return calculateInvalidationDelay(info, renderStartTime, frameDuration);
 }

@@ -5,6 +5,7 @@
 #define NULL_POINTER_EXCEPTION_CLASS_NAME "java/lang/NullPointerException"
 
 inline void throwException(JNIEnv *env, enum Exception exception, char *message) {
+    //__builtin_trap();
     return;
     /*
 	if (errno == ENOMEM) {
@@ -55,6 +56,7 @@ inline bool isSourceNull(void *ptr, JNIEnv *env) {
 }
 
 void throwGifIOException(int gifErrorCode, JNIEnv *env, bool readErrno) {
+    //__builtin_trap();
 	return;
     /*
 //nullchecks just to prevent segfaults, LinkageError will be thrown if GifIOException cannot be instantiated

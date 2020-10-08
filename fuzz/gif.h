@@ -21,6 +21,8 @@
 #include <limits.h>
 #include <sys/cdefs.h>
 #include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
 #include <pthread.h>
 #include <poll.h>
 #include <errno.h>
@@ -203,7 +205,7 @@ bool reset(GifInfo *info);
 int lockPixels(JNIEnv *env, jobject jbitmap, GifInfo *info, void **pixels);
 
 void unlockPixels(JNIEnv *env, jobject jbitmap);
-void unlockPixels_(JNIEnv *env, void** pixels);
+void unlockPixels_(void* pixels);
 
 long long calculateInvalidationDelay(GifInfo *info, long renderStartTime, uint_fast32_t frameDuration);
 
@@ -222,3 +224,12 @@ uint_fast32_t seek(GifInfo *info, uint_fast32_t desiredIndex, void *pixels);
 void setGCBDefaults(GraphicsControlBlock *gcb);
 
 GifInfo *createGifInfoFromFile(JNIEnv *env, FILE *file, long long sourceLength);
+
+__unused JNIEXPORT jlong JNICALL
+Java_pl_droidsonroids_gif_GifInfoHandle_openDirectByteBuffer(JNIEnv *env, jclass __unused class, jobject buffer);
+
+__unused JNIEXPORT jlong JNICALL
+Java_pl_droidsonroids_gif_GifInfoHandle_renderFrame(JNIEnv *env, jclass __unused handleClass, jlong gifInfo, jobject jbitmap);
+
+__unused JNIEXPORT void JNICALL
+Java_pl_droidsonroids_gif_GifInfoHandle_free(JNIEnv *env, jclass __unused handleClass, jlong gifInfo);

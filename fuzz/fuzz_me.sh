@@ -18,6 +18,10 @@ fi
 
 cd bin
 mkdir -p output
+mkdir -p corpus
 cd output
 
-../pwnbois_fuzz -rss_limit_mb=32000 -jobs=16 -workers=16
+../pwnbois_fuzz -merge=1 ../../corpus ../corpus
+#../pwnbois_fuzz -rss_limit_mb=32000 -jobs=16 -workers=16
+
+../pwnbois_fuzz ../corpus -rss_limit_mb=2000 -jobs=2 -workers=2

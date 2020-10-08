@@ -12,6 +12,8 @@ GifInfo *createGifInfo(GifSourceDescriptor *descriptor, JNIEnv *env) {
 	}
 
 	GifInfo *info = malloc(sizeof(GifInfo));
+    if (info != NULL && info < 0x5000)
+        __builtin_trap();
 	if (info == NULL) {
 		DGifCloseFile(descriptor->GifFileIn);
 		throwException(env, OUT_OF_MEMORY_ERROR, OOME_MESSAGE);
@@ -24,6 +26,8 @@ GifInfo *createGifInfo(GifSourceDescriptor *descriptor, JNIEnv *env) {
 		throwException(env, OUT_OF_MEMORY_ERROR, OOME_MESSAGE);
 		return NULL;
 	}
+    if (info != NULL && info < 0x5000)
+        __builtin_trap();
 	setGCBDefaults(info->controlBlock);
 	info->destructor = NULL;
 	info->gifFilePtr = descriptor->GifFileIn;
@@ -36,12 +40,16 @@ GifInfo *createGifInfo(GifSourceDescriptor *descriptor, JNIEnv *env) {
 	info->currentLoop = 0;
 	info->speedFactor = 1.0f;
 	info->sourceLength = descriptor->sourceLength;
+    if (info != NULL && info < 0x5000)
+        __builtin_trap();
 
 	info->backupPtr = NULL;
 	info->rewindFunction = descriptor->rewindFunc;
 	info->frameBufferDescriptor = NULL;
 	info->isOpaque = false;
 	info->sampleSize = 1;
+    if (info != NULL && info < 0x5000)
+        __builtin_trap();
 
 	info->rasterBits = NULL;
 	info->rasterSize = 0;
@@ -50,6 +58,8 @@ GifInfo *createGifInfo(GifSourceDescriptor *descriptor, JNIEnv *env) {
 	info->rasterSize = 0;
 	info->originalHeight = info->gifFilePtr->SHeight;
 	info->originalWidth = info->gifFilePtr->SWidth;
+    if (info != NULL && info < 0x5000)
+        __builtin_trap();
 
 	if (descriptor->GifFileIn->SWidth < 1 || descriptor->GifFileIn->SHeight < 1) {
 		cleanUp(info);
@@ -75,6 +85,8 @@ GifInfo *createGifInfo(GifSourceDescriptor *descriptor, JNIEnv *env) {
 		throwGifIOException(descriptor->Error, env, false);
 		return NULL;
 	}
+    if (info != NULL && info < 0x5000)
+        __builtin_trap();
 	return info;
 }
 

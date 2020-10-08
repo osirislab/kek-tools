@@ -30,6 +30,14 @@ target_sources(pwnbois_fuzz PRIVATE dispose.c
                                     giflib/gifalloc.c
                                     fuzz.c)
 
-target_compile_options(pwnbois_fuzz PUBLIC -fsanitize=address,fuzzer -fno-omit-frame-pointer)
-set_target_properties(pwnbois_fuzz PROPERTIES LINK_FLAGS -fsanitize=address,fuzzer)
+add_library(ljvm SHARED IMPORTED)
+set_property(TARGET ljvm PROPERTY IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/lib/amd64/server/libjvm.so)
+target_link_libraries(pwnbois_fuzz ljvm)
+
+target_compile_options(pwnbois_fuzz PUBLIC -fsanitize=fuzzer
+                                           -fno-omit-frame-pointer
+                                           -fprofile-instr-generate
+                                           -fcoverage-mapping
+                                           -g)
+set_target_properties(pwnbois_fuzz PROPERTIES LINK_FLAGS -fsanitize=fuzzer)
 
