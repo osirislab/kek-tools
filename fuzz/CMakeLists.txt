@@ -1,12 +1,14 @@
 cmake_minimum_required(VERSION 3.4.1)
 
+set(CMAKE_C_COMPILER clang)
+set(CMAKE_CXX_COMPILER clang++)
+
+project(kek)
 set(CMAKE_VERBOSE_MAKEFILE on)
 set(can_use_assembler TRUE)
 enable_language(ASM)
 set(CMAKE_BUILD_TYPE Debug)
 
-set(CMAKE_C_COMPILER clang)
-set(CMAKE_CXX_COMPILER clang++)
 
 
 add_executable(pwnbois_fuzz "")

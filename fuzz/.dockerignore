@@ -1,0 +1,5 @@
+bin
+build
+cmake-*
+.idea
+pwnbois_fuzz
