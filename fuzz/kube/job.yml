@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kek
+
+---
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: kek-run
+  namespace: kek
+spec:
+  replicas: 3
+  template:
+    spec:
+      restartPolicy: Always
+      containers:
+      - name: fuzz
+        image: registry.osiris.services/kek/fuzz
+        resources:
+          limits:
+            memory: "4Gi"
+            cpu: "2"
+          requests:
+            memory: "4Gi"
+            cpu: "2"
+        volumeMounts:
+        - mountPath: "/home/kek/out"
+          name: kek-out
+      volumes:
+      - name: kek-out
+        persistentVolumeClaim:
+          claimName: kek-out
+  backoffLimit: 4
+
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: kek-out
+  namespace: kek
+spec:
+  accessModes:
+    - ReadWriteMany
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 1Gi

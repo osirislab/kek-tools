@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kek-ssh
+  namespace: kek
+  labels:
+    app: kek-ssh
+spec:
+  selector:
+    matchLabels:
+      app: kek-ssh
+  template:
+    metadata:
+      labels:
+        app: kek-ssh
+    spec:
+      containers:
+      - name: ssh-server
+        image: linuxserver/openssh-server
+        ports:
+        - containerPort: 2222
+        env:
+        - name: PUID
+          value: "1000"
+        - name: PGID
+          value: "1000"
+        - name: TZ
+          value: "America/New_York"
+        - name: SUDO_ACCESS
+          value: "true"
+        - name: PASSWORD_ACCESS
+          value: "true"
+        - name: USER_PASSWORD
+          value: "kek"
+        - name: USER_NAME
+          value: "kek"
+        volumeMounts:
+        - mountPath: "/home/kek/out"
+          name: kek-out
+      volumes:
+      - name: kek-out
+        persistentVolumeClaim:
+          claimName: kek-out
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kek-ssh
+  namespace: kek
+spec:
+  type: NodePort
+  ports:
+  - port: 2222
+    protocol: TCP
+  selector:
+    app: kek-ssh
