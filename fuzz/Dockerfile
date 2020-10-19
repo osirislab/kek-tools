@@ -11,8 +11,9 @@ COPY . .
 RUN cmake -B . -G Ninja . \
   && ninja \
   && cd .. \
-  && mv build/pwnbois_fuzz ./
+  && mv build/pwnbois_fuzz ./ \
+  && mv build/tmp_reduced_corpus ./
 
 WORKDIR /opt/kek/out
 
-CMD ../pwnbois_fuzz
+CMD ["../pwnbois_fuzz", "../tmp_reduced_corpus", "-rss_limit_mb=2000"]
