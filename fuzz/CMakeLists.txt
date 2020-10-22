@@ -34,10 +34,14 @@ add_library(ljvm SHARED IMPORTED)
 set_property(TARGET ljvm PROPERTY IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/lib/amd64/server/libjvm.so)
 target_link_libraries(pwnbois_fuzz ljvm)
 
-target_compile_options(pwnbois_fuzz PUBLIC -fsanitize=fuzzer
+target_compile_options(pwnbois_fuzz PUBLIC -fsanitize=fuzzer,address
                                            -fno-omit-frame-pointer
                                            -fprofile-instr-generate
                                            -fcoverage-mapping
                                            -g)
-set_target_properties(pwnbois_fuzz PROPERTIES LINK_FLAGS -fsanitize=fuzzer)
+set_target_properties(pwnbois_fuzz PROPERTIES LINK_FLAGS -fsanitize=fuzzer,address
+                                                         -fno-omit-frame-pointer
+                                                         -fprofile-instr-generate
+                                                         -fcoverage-mapping
+                                                         -g)
 

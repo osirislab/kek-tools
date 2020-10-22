@@ -12,7 +12,7 @@ metadata:
   labels:
     app: kek-run
 spec:
-  replicas: 3
+  replicas: 5
   selector:
     matchLabels:
       app: kek-run
@@ -29,7 +29,8 @@ spec:
       - name: fuzz
         imagePullPolicy: Always
         image: registry.osiris.services/kek/fuzz
-        command: ["../pwnbois_fuzz", "-rss_limit_mb=32000"]
+        #command: ["../pwnbois_fuzz", "../tmp_reduced_corpus", "-rss_limit_mb=32000"]
+        command: ["../build/fuzz_start.sh"]
         resources:
           limits:
             memory: "4Gi"
@@ -44,7 +45,7 @@ spec:
       - name: kek-out
         persistentVolumeClaim:
           claimName: kek-out
-  
+
 
 ---
 apiVersion: v1
