@@ -34,19 +34,22 @@ add_library(ljvm SHARED IMPORTED)
 set_property(TARGET ljvm PROPERTY IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/lib/amd64/server/libjvm.so)
 
 #i have no fucking clue how cmake works
-target_link_libraries(pwnbois_fuzz ljvm -fsanitize=fuzzer,address
+target_link_libraries(pwnbois_fuzz ljvm -fsanitize=fuzzer,address,undefined
                                         -fprofile-instr-generate
                                         -fcoverage-mapping
+                                        -fno-sanitize-recover=all
                                         -g)
 
-target_compile_options(pwnbois_fuzz PUBLIC -fsanitize=fuzzer,address
+target_compile_options(pwnbois_fuzz PUBLIC -fsanitize=fuzzer,address,undefined
                                            -fno-omit-frame-pointer
                                            -fprofile-instr-generate
                                            -fcoverage-mapping
+                                           -fno-sanitize-recover=all
                                            -g)
-set_target_properties(pwnbois_fuzz PROPERTIES LINK_FLAGS -fsanitize=fuzzer,address
+set_target_properties(pwnbois_fuzz PROPERTIES LINK_FLAGS -fsanitize=fuzzer,address,undefined
                                                          -fno-omit-frame-pointer
                                                          -fprofile-instr-generate
                                                          -fcoverage-mapping
+                                                         -fno-sanitize-recover=all
                                                          -g)
 
