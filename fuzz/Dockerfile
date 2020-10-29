@@ -3,7 +3,7 @@ FROM ubuntu:20.04
 VOLUME /home/kek/out
 ENV CC=clang CXX=clang++
 RUN apt update \
-  && apt install -y g++-multilib clang llvm libfuzzer-10-dev cmake ninja-build \
+  && apt install -y g++-multilib clang llvm libfuzzer-10-dev cmake ninja-build openssh-client \
   && rm -rf /var/lib/apt/lists/*
 WORKDIR /home/kek/build
 COPY . .

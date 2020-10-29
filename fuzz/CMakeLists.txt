@@ -32,7 +32,12 @@ target_sources(pwnbois_fuzz PRIVATE dispose.c
 
 add_library(ljvm SHARED IMPORTED)
 set_property(TARGET ljvm PROPERTY IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/lib/amd64/server/libjvm.so)
-target_link_libraries(pwnbois_fuzz ljvm)
+
+#i have no fucking clue how cmake works
+target_link_libraries(pwnbois_fuzz ljvm -fsanitize=fuzzer,address
+                                        -fprofile-instr-generate
+                                        -fcoverage-mapping
+                                        -g)
 
 target_compile_options(pwnbois_fuzz PUBLIC -fsanitize=fuzzer,address
                                            -fno-omit-frame-pointer

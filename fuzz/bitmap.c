@@ -3,6 +3,9 @@
 
 int lockPixels(JNIEnv *env, jobject jbitmap, GifInfo *info, void **pixels) {
     *pixels = calloc(info->gifFilePtr->SWidth * info->gifFilePtr->SHeight, sizeof(argb));
+    if (pixels == NULL)
+        return 1;
+
     info->stride = info->gifFilePtr->SWidth;
     return 0;
 

@@ -1,4 +1,6 @@
 #include "gif.h"
+#define LIMIT_SIZE
+#define SIZE_LIMIT 100000000
 
 /*
 int LLVMFuzzerInitialize(int argc, char **argv) {
@@ -73,15 +75,25 @@ int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
 
     //jlong info = Java_pl_droidsonroids_gif_GifInfoHandle_openNativeFileDescriptor(env, NULL, fd, 0);
     jlong info = Java_pl_droidsonroids_gif_GifInfoHandle_openDirectByteBuffer(env, NULL, bytebuffer);
+    GifInfo *gif = (GifInfo*) (intptr_t) info;
 
     if (info == NULL) {
         //fclose(f);
         return 0;
     }
 
+#ifdef LIMIT_SIZE
+    if (gif->gifFilePtr->SWidth * gif->gifFilePtr->SHeight * sizeof(argb) > SIZE_LIMIT)
+    {
+        Java_pl_droidsonroids_gif_GifInfoHandle_free(env, NULL, info);
+        return 0;
+    }
+#endif
+
     //jobject bitmap = create_bitmap(env, info);
     jobject bitmap = NULL;
-    for (int i = 0; i < 10; ++i)
+    //while (gif->currentIndex < gif->gifFilePtr->ImageCount)
+    for (int i = 0; i < 10 && gif->currentIndex < gif->gifFilePtr->ImageCount; ++i)
     {
         Java_pl_droidsonroids_gif_GifInfoHandle_renderFrame(env, NULL, info, bitmap);
     }
